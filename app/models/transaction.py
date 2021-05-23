@@ -1,4 +1,5 @@
 from .db import db
+from sqlalchemy.sql import func
 
 
 class Transaction(db.Model):
@@ -13,5 +14,7 @@ class Transaction(db.Model):
     sold = db.Column(db.Integer)
     total = db.Column(db.Numeric(scale=2), nullable=False)
     holdings = db.Column(db.Integer, db.CheckConstraint('holdings>=0'))
+    created_at = db.Column(db.DateTime, default=func.now(), nullable=False)
+    updated_at = db.Column(db.DateTime, default=func.now(), nullable=False)
 
     user = db.relationship('User', back_populates='transactions')
