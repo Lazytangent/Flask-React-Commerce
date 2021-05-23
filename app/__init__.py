@@ -25,7 +25,8 @@ app.register_blueprint(auth_routes, url_prefix='/api/auth')
 app.register_blueprint(stock_routes, url_prefix='/api/stocks')
 
 db.init_app(app)
-Migrate(app, db)
+migrate = Migrate(compare_type=True, compare_server_default=True)
+migrate.init_app(app, db)
 CORS(app)
 
 

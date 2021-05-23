@@ -11,7 +11,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.Text, nullable=False, unique=True)
     hashed_password = db.Column(db.Text, nullable=False)
     cash = db.Column(db.Numeric(scale=2), nullable=False)
-    created_at = db.Column(db.DateTime, default=func.now(), nullable=False)
-    updated_at = db.Column(db.DateTime, default=func.now(), nullable=False)
+    created_at = db.Column(db.DateTime, server_default=func.now(), nullable=False)
+    updated_at = db.Column(db.DateTime, server_default=func.now(), nullable=False)
 
     transactions = db.relationship('Transaction', back_populates='user')
