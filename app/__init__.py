@@ -6,19 +6,23 @@ from flask_migrate import Migrate
 from flask_wtf.csrf import generate_csrf
 from flask_login import LoginManager
 
+from .api import auth_routes, stock_routes
 from .config import Config
 from .models import db, User
-from .api import auth_routes, stock_routes
+from .seeds import seed_commands
 
 app = Flask(__name__)
 
 login = LoginManager(app)
+login.login_view = 'auth.unauthorized'
 
 
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
 
+
+app.cli.add_command(seed_commands)
 
 app.config.from_object(Config)
 app.register_blueprint(auth_routes, url_prefix='/api/auth')
