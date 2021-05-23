@@ -15,6 +15,7 @@ wtforms = "*"
 flask-login = "*"
 psycopg2-binary = "*"
 flask-cors = "*"
+werkzeug = "*"
 
 [dev-packages]
 
