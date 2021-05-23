@@ -3,11 +3,12 @@ import os
 from flask import Flask
 from flask_cors import CORS
 from flask_migrate import Migrate
-from flask_wtf.csrf import CSRFProtect, generate_csrf
+from flask_wtf.csrf import generate_csrf
 from flask_login import LoginManager
 
 from .config import Config
 from .models import db, User
+from .api import auth_routes, stock_routes
 
 app = Flask(__name__)
 
@@ -20,6 +21,9 @@ def load_user(id):
 
 
 app.config.from_object(Config)
+app.register_blueprint(auth_routes, url_prefix='/api/auth')
+app.register_blueprint(stock_routes, url_prefix='/api/stocks')
+
 db.init_app(app)
 Migrate(app, db)
 CORS(app)
