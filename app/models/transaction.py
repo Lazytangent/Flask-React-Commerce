@@ -18,3 +18,16 @@ class Transaction(db.Model):
     updated_at = db.Column(db.DateTime, server_default=func.now(), nullable=False)
 
     user = db.relationship('User', back_populates='transactions')
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'timestamp': self.timestamp,
+            'user_id': self.user_id,
+            'stock': self.stock,
+            'price': self.price,
+            'bought': self.bought,
+            'sold': self.sold,
+            'total': self.total,
+            'holdings': self.holdings,
+        }

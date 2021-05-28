@@ -15,3 +15,10 @@ class User(db.Model, UserMixin):
     updated_at = db.Column(db.DateTime, server_default=func.now(), nullable=False)
 
     transactions = db.relationship('Transaction', back_populates='user')
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'cash': self.cash,
+        }
