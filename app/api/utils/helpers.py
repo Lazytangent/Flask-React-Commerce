@@ -4,7 +4,7 @@ import urllib.parse
 from app.config import Config
 
 
-def lookup(symbol):
+def lookup_symbol(symbol):
     """
     Look up quote for symbol.
     """
