@@ -73,3 +73,12 @@ def unauthorized():
     Returns unauthorized JSON when flask-login authentication fails
     """
     return {'errors': ['Unauthorized']}, 401
+
+
+@auth_routes.route('/resetpwd', methods=['POST'])
+@login_required
+def resetpwd():
+    """
+    Reset a user's password
+    """
+    pass
