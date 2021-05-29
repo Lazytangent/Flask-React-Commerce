@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from app.models import db, User
-from app.forms import LoginForm, SignUpForm
+from app.forms import LoginForm, SignUpForm, ResetPwdForm
 from flask_login import current_user, login_user, logout_user, login_required
 
 auth_routes = Blueprint('auth', __name__)
@@ -81,4 +81,10 @@ def resetpwd():
     """
     Reset a user's password
     """
-    pass
+    form = ResetPwdForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+    if form.validate_on_submit():
+        current_user.password = form.data['newpwd']
+        db.session.commit()
+        return current_user.to_dict()
+    return {'errors': validation_errors_to_error_messages(form.errors)}

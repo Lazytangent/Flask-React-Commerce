@@ -16,6 +16,17 @@ class User(db.Model, UserMixin):
 
     transactions = db.relationship('Transaction', back_populates='user')
 
+    @property
+    def password(self):
+        return self.hashed_password
+
+    @password.setter
+    def password(self, password):
+        self.hashed_password = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+
     def to_dict(self):
         return {
             'id': self.id,
