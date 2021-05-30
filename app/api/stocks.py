@@ -114,7 +114,7 @@ def quote():
 
 
 @stock_routes.route('/sell', methods=['POST'])
-@login_required
+# @login_required
 def sell():
     """
     Sell shares of stock
@@ -122,5 +122,13 @@ def sell():
     form = SellStockForm()
     form['csrf_token'].data = request.cookies['csrf_token']
     if form.validate_on_submit():
-        pass
-    pass
+        symbol = form['symbol'].data
+        shares = form['shares'].data
+
+        info = Transaction.query.filter(Transaction.user_id ==
+            current_user.id, Transaction.stock == symbol).distinct(
+            Transaction.stock).order_by(
+            Transaction.id.desc()).all()
+        print(info)
+        return {}
+    return {}
