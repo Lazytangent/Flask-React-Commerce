@@ -18,10 +18,10 @@ def index():
                                     current_user.id).all()
     stock = Transaction.query.filter(Transaction.user_id ==
                                      current_user.id).distinct(Transaction.stock)
-    stocks = [d["stock"] for d in stock]
+    stocks = [d.stock for d in stock]
     prices = {}
-    cash = current_user['cash']
-    total = cash
+    cash = current_user.cash
+    total = float(cash)
     names = {}
 
     for stock in stocks:
@@ -31,16 +31,18 @@ def index():
 
     values = {}
     for row in hist:
-        values[row["stock"]] = row["holdings"] * prices[row["stock"]]
-        total += values[row["stock"]]
+        values[row.stock] = row.holdings * prices[row.stock]
+        total += values[row.stock]
+
+    hist = [t.to_dict() for t in hist]
 
     return {
         'hist': hist,
         'prices': prices,
         'values': values,
-        'total': total,
+        'total': str(round(total, 2)),
         'names': names,
-        'cash': cash,
+        'cash': str(round(cash, 2)),
     }
 
 
@@ -73,7 +75,7 @@ def buy():
             total=total,
             holdings=holdings
         )
-        current_user.cash -= total
+        current_user.cash = float(current_user.cash) + total
         db.session.add(transaction)
         db.session.commit()
         return transaction.to_dict()
@@ -88,8 +90,9 @@ def history():
     """
     hist = Transaction.query.filter(Transaction.user_id ==
                                     current_user.id).all()
-    stocks = [d['stock'] for d in hist]
+    stocks = [d.stock for d in hist]
     names = {}
+    hist = [t.to_dict() for t in hist]
 
     for stock in stocks:
         quote = lookup_symbol(stock)
@@ -113,7 +116,7 @@ def quote():
     if quote == None:
         return {'errors': ['You need a real stock symbol']}, 400
 
-    return { 'quote': quote }
+    return quote
 
 
 @stock_routes.route('/sell', methods=['POST'])
@@ -128,9 +131,25 @@ def sell():
         symbol = form['symbol'].data
         shares = form['shares'].data
 
-        info = Transaction.query.filter(Transaction.user_id ==
+        prev_transaction = Transaction.query.filter(Transaction.user_id ==
             current_user.id, Transaction.stock == symbol).order_by(
-            Transaction.id.desc()).distinct(Transaction.stock).all()
-        print(info)
-        return {}
-    return {}
+            Transaction.id.desc()).first()
+        prev_holdings = prev_transaction.holdings
+        data = lookup_symbol(symbol)
+        price = data['price']
+        total = price * shares
+        holdings = prev_holdings - shares
+        transaction = Transaction(
+            user_id=current_user.id,
+            stock=symbol,
+            price=price,
+            bought=0,
+            sold=shares,
+            total=total,
+            holdings=holdings
+        )
+        current_user.cash = float(current_user.cash) + total
+        db.session.add(transaction)
+        db.session.commit()
+        return transaction.to_dict()
+    return {'errors': validation_errors_to_error_messages(form.errors)}
