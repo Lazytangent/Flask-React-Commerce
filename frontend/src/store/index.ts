@@ -1,8 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 
+import session from './session';
+import transactions from './transactions';
+
 export const store = configureStore({
   reducer: {
-
+    session,
+    transactions,
   },
 });
 
