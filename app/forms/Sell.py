@@ -16,7 +16,7 @@ def enough_stock(form, field):
         raise ValidationError("Cannot sell more than the amount you have")
 
 
-class SellForm(FlaskForm):
+class SellStockForm(FlaskForm):
     symbol = StringField('symbol', validators=[DataRequired()])
     shares = IntegerField('shares', validators=[DataRequired(),
         NumberRange(min=1), enough_stock])
