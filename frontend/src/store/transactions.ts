@@ -62,13 +62,35 @@ export const sellStock = createAsyncThunk(
   }
 );
 
-const initialState = {};
+const initialState = { errors: [], quote: null, history: null };
 
 const transactionsSlice = createSlice({
   name: 'transactions',
   initialState,
   reducers: {},
-  extraReducers: {},
+  extraReducers: {
+    [buyStock.fulfilled]: (state, action) => {
+      state[action.id] = action.payload;
+    },
+    [buyStock.rejected]: (state, action) => {
+      state.errors = action.payload;
+    },
+    [getHistory.fulfilled]: (state, action) => {
+      state.history = action.payload;
+    },
+    [getQuote.fulfilled]: (state, action) => {
+      state.quote = action.payload;
+    },
+    [getQuote.rejected]: (state, action) => {
+      state.errors = action.payload;
+    },
+    [sellStock.fulfilled]: (state, action) => {
+      action[action.id] = action.payload;
+    },
+    [sellStock.rejected]: (state, action) => {
+      state.errors = action.payload;
+    },
+  },
 });
 
 export default transactionsSlice.reducer;
