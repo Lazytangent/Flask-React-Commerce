@@ -25,9 +25,9 @@ class Transaction(db.Model):
             'timestamp': self.timestamp,
             'user_id': self.user_id,
             'stock': self.stock,
-            'price': self.price,
+            'price': str(round(self.price, 2)),
             'bought': self.bought,
             'sold': self.sold,
-            'total': self.total,
+            'total': str(round(self.total, 2)),
             'holdings': self.holdings,
         }

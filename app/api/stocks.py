@@ -53,12 +53,14 @@ def buy():
     form = BuyStockForm()
     form['csrf_token'].data = request.cookies['csrf_token']
     if form.validate_on_submit():
-        stock = form['stock'].data
+        stock = form['symbol'].data
         shares = form['shares'].data
+        holdings = shares
         prev_transaction = Transaction.query.filter(Transaction.user_id ==
-            current_user.id, Transaction.stock == symbol).order_by(
+            current_user.id, Transaction.stock == stock).order_by(
             Transaction.id.desc()).first()
-        holdings = shares + prev_transaction.holdings
+        if prev_transaction:
+            holdings = shares + prev_transaction.holdings
         data = lookup_symbol(stock)
         price = data['price']
         total = -1 * price * shares
@@ -114,7 +116,7 @@ def quote():
 
 
 @stock_routes.route('/sell', methods=['POST'])
-# @login_required
+@login_required
 def sell():
     """
     Sell shares of stock
