@@ -1,4 +1,5 @@
 from .LoginForm import LoginForm
 from .SignUpForm import SignUpForm
 from .ResetPwd import ResetPwdForm
-from .BuyStock impor BuyStockForm
+from .BuyStock import BuyStockForm
+from .Sell import SellForm
