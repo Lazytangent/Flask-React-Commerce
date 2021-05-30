@@ -11,7 +11,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.Text, nullable=False, unique=True)
     email = db.Column(db.Text, nullable=False, unique=True)
     hashed_password = db.Column(db.Text, nullable=False)
-    cash = db.Column(db.Numeric(scale=2), nullable=False, server_default=10000)
+    cash = db.Column(db.Numeric(scale=2), nullable=False, default=10000)
     created_at = db.Column(db.DateTime, server_default=func.now(), nullable=False)
     updated_at = db.Column(db.DateTime, server_default=func.now(), nullable=False)
 
@@ -32,5 +32,5 @@ class User(db.Model, UserMixin):
         return {
             'id': self.id,
             'username': self.username,
-            'cash': self.cash,
+            'cash': str(round(self.cash, 2)),
         }
