@@ -73,6 +73,7 @@ def buy():
             total=total,
             holdings=holdings
         )
+        current_user.cash -= total
         db.session.add(transaction)
         db.session.commit()
         return transaction.to_dict()
@@ -128,9 +129,8 @@ def sell():
         shares = form['shares'].data
 
         info = Transaction.query.filter(Transaction.user_id ==
-            current_user.id, Transaction.stock == symbol).distinct(
-            Transaction.stock).order_by(
-            Transaction.id.desc()).all()
+            current_user.id, Transaction.stock == symbol).order_by(
+            Transaction.id.desc()).distinct(Transaction.stock).all()
         print(info)
         return {}
     return {}
