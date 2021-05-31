@@ -1,6 +1,27 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-export const login = createAsyncThunk(
+interface User {
+  id: number;
+  username: string;
+  email: string;
+}
+
+interface SessionState {
+  user: User | null;
+  errors: string[];
+}
+
+interface AuthErrors {
+  errors: string[];
+}
+
+export const login = createAsyncThunk<
+  User,
+  User,
+  {
+    rejectValue: AuthErrors
+  }
+>(
   'session/login',
   async (userData, { rejectWithValue }) => {
     const res = await fetch('/api/auth/login', {
@@ -10,13 +31,19 @@ export const login = createAsyncThunk(
     });
     const user = await res.json();
     if (user.errors) {
-      return rejectWithValue(user.errors);
+      return rejectWithValue((user.errors) as AuthErrors);
     }
-    return user;
+    return user as User;
   }
 );
 
-export const authenticate = createAsyncThunk(
+export const authenticate = createAsyncThunk<
+  User,
+  undefined,
+  {
+    rejectValue: AuthErrors,
+  }
+>(
   'session/authenticate',
   async (_, { rejectWithValue }) => {
     const res = await fetch('/api/auth');
@@ -37,7 +64,13 @@ export const logout = createAsyncThunk(
   }
 );
 
-export const signup = createAsyncThunk(
+export const signup = createAsyncThunk<
+  User,
+  User,
+  {
+    rejectValue: AuthErrors,
+  }
+>(
   'session/signup',
   async (userData, { rejectWithValue }) => {
     const res = await fetch('/api/auth/signup', {
@@ -47,38 +80,38 @@ export const signup = createAsyncThunk(
     });
     const user = await res.json();
     if (user.errors) {
-      return rejectWithValue(user.errors);
+      return rejectWithValue((user.errors) as AuthErrors);
     }
-    return user;
+    return user as User;
   }
 );
 
 const sessionSlice = createSlice({
   name: 'session',
-  initialState: { user: null, errors: [] },
+  initialState: { user: null, errors: [] } as SessionState,
   reducers: {},
-  extraReducers: {
-    [login.fulfilled]: (state, action) => {
+  extraReducers: (builder) => {
+    builder.addCase(login.fulfilled, (state, action) => {
       state.user = action.payload;
-    },
-    [login.rejected]: (state, action) => {
-      state.errors = action.payload;
-    },
-    [authenticate.fulfilled]: (state, action) => {
+    });
+    builder.addCase(login.rejected, (state, action) => {
+      state.errors = action.payload?.errors!;
+    });
+    builder.addCase(authenticate.fulfilled, (state, action) => {
       state.user = action.payload;
-    },
-    [authenticate.rejected]: (state, action) => {
-      state.errors = action.payload;
-    },
-    [logout.fulfilled]: (state, _) => {
+    });
+    builder.addCase(authenticate.rejected, (state, action) => {
+      state.errors = action.payload?.errors!;
+    });
+    builder.addCase(logout.fulfilled, (state, _) => {
       state.user = null;
-    },
-    [signup.fulfilled]: (state, action) => {
+    });
+    builder.addCase(signup.fulfilled, (state, action) => {
       state.user = action.payload;
-    },
-    [signup.rejected]: (state, action) => {
-      state.errors = action.payload;
-    },
+    });
+    builder.addCase(signup.rejected, (state, action) => {
+      state.errors = action.payload?.errors!;
+    });
   },
 });
 
