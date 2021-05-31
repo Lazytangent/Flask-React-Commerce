@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { RootState } from "../../store";
 
 import { logout } from "../../store/session";
-import { useNotificationContext } from '../../context/Notification';
 import Signup from "../Signup";
 import Login from "../Login";
 import Notifications from '../Notifications';
@@ -15,7 +14,6 @@ const Header = () => {
   const sessionUser = useSelector((state: RootState) => state.session.user);
 
   const [showNavbar, setShowNavbar] = useState(false);
-  const { notifications } = useNotificationContext();
 
   return (
     <nav>
@@ -60,7 +58,7 @@ const Header = () => {
           )}
         </>
       )}
-      {notifications.length > 0 && <Notifications notifications={notifications} />}
+      <Notifications />
     </nav>
   );
 };

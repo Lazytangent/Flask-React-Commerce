@@ -1,7 +1,12 @@
 import { ReactNode, createContext, useContext, useState } from 'react';
 
-const NotificationContext = createContext({});
-export const useNotificationContext = () => useContext(NotificationContext);
+interface Notification {
+  notifications: string[];
+  setNotifications: Function;
+}
+
+const NotificationContext = createContext({ notifications: [], setNotifications: () => null });
+export const useNotificationContext = (): Notification => useContext(NotificationContext);
 
 interface Props {
   children: ReactNode;
