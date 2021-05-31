@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
 import { store } from './store';
+import NotificationProvider from './context/Notification';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -11,7 +12,9 @@ import reportWebVitals from './reportWebVitals';
 const Root = () => (
   <Provider store={store}>
     <BrowserRouter>
-      <App />
+      <NotificationProvider>
+        <App />
+      </NotificationProvider>
     </BrowserRouter>
   </Provider>
 );
