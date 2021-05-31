@@ -1,5 +1,5 @@
 {
-  "name": "react-app",
+  "name": "frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -8,12 +8,18 @@
     "@testing-library/user-event": "^12.8.3",
     "@types/jest": "^26.0.23",
     "@types/node": "^12.20.13",
-    "@types/react": "^17.0.8",
+    "@types/react": "^17.0.6",
     "@types/react-dom": "^17.0.5",
+    "@types/react-router": "^5.1.14",
+    "@types/react-router-dom": "^5.1.7",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-redux": "^7.2.4",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
-    "typescript": "^4.3.2",
+    "redux": "^4.1.0",
+    "redux-thunk": "^2.3.0",
+    "typescript": "^4.2.4",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
@@ -39,5 +45,13 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "devDependencies": {
+    "@types/react-redux": "^7.1.16",
+    "@types/redux": "^3.6.0",
+    "@types/redux-thunk": "^2.1.0",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-logger": "^3.0.6"
+  },
+  "proxy": "http://localhost:5000"
 }
