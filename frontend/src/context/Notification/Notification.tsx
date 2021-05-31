@@ -1,18 +1,10 @@
-import { ReactNode, createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
+import { ContextProps, ProviderProps } from './types';
 
-interface Notification {
-  notifications: string[];
-  setNotifications: Function;
-}
+const NotificationContext = createContext<Partial<ContextProps>>({});
+export const useNotificationContext = (): Partial<ContextProps> => useContext(NotificationContext);
 
-const NotificationContext = createContext({ notifications: [], setNotifications: () => null });
-export const useNotificationContext = (): Notification => useContext(NotificationContext);
-
-interface Props {
-  children: ReactNode;
-};
-
-const NotificationProvider = ({ children }: Props) => {
+const NotificationProvider = ({ children }: ProviderProps) => {
   const [notifications, setNotifications] = useState([]);
 
   return (
