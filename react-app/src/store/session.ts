@@ -1,118 +1,72 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { AppDispatch, User, UserData, SessionState, SessionAction } from './';
 
-interface User {
-  id: number;
-  username: string;
-  email: string;
-}
+const SET_USER = 'session/SET_USER';
+const REMOVE_USER = 'session/REMOVE_USER';
 
-interface SessionState {
-  user: User | null;
-  errors: string[];
-}
-
-interface AuthErrors {
-  errors: string[];
-}
-
-export const login = createAsyncThunk<
-  User,
-  User,
-  {
-    rejectValue: AuthErrors
-  }
->(
-  'session/login',
-  async (userData, { rejectWithValue }) => {
-    const res = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(userData),
-    });
-    const user = await res.json();
-    if (user.errors) {
-      return rejectWithValue((user.errors) as AuthErrors);
-    }
-    return user as User;
-  }
-);
-
-export const authenticate = createAsyncThunk<
-  User,
-  undefined,
-  {
-    rejectValue: AuthErrors,
-  }
->(
-  'session/authenticate',
-  async (_, { rejectWithValue }) => {
-    const res = await fetch('/api/auth');
-    const user = await res.json();
-    if (user.errors) {
-      return rejectWithValue(user.errors);
-    }
-    return user;
-  }
-);
-
-export const logout = createAsyncThunk(
-  'session/logout',
-  async () => {
-    const res = await fetch('/api/auth/logout');
-    const msg = await res.json();
-    return msg;
-  }
-);
-
-export const signup = createAsyncThunk<
-  User,
-  User,
-  {
-    rejectValue: AuthErrors,
-  }
->(
-  'session/signup',
-  async (userData, { rejectWithValue }) => {
-    const res = await fetch('/api/auth/signup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(userData),
-    });
-    const user = await res.json();
-    if (user.errors) {
-      return rejectWithValue((user.errors) as AuthErrors);
-    }
-    return user as User;
-  }
-);
-
-const sessionSlice = createSlice({
-  name: 'session',
-  initialState: { user: null, errors: [] } as SessionState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder.addCase(login.fulfilled, (state, action) => {
-      state.user = action.payload;
-    });
-    builder.addCase(login.rejected, (state, action) => {
-      state.errors = action.payload?.errors!;
-    });
-    builder.addCase(authenticate.fulfilled, (state, action) => {
-      state.user = action.payload;
-    });
-    builder.addCase(authenticate.rejected, (state, action) => {
-      state.errors = action.payload?.errors!;
-    });
-    builder.addCase(logout.fulfilled, (state, _) => {
-      state.user = null;
-    });
-    builder.addCase(signup.fulfilled, (state, action) => {
-      state.user = action.payload;
-    });
-    builder.addCase(signup.rejected, (state, action) => {
-      state.errors = action.payload?.errors!;
-    });
-  },
+const setUser = (user: User) => ({
+  type: SET_USER,
+  payload: user,
 });
 
-export default sessionSlice.reducer;
+const removeUser = () => ({
+  type: REMOVE_USER,
+});
+
+export const login = (userData: UserData) => async (dispatch: AppDispatch) => {
+  const res: Response = await fetch('/api/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(userData),
+  });
+  const user: User = await res.json();
+  if (!user.errors) {
+    dispatch(setUser(user));
+  }
+  return user;
+};
+
+export const authenticate = () => async (dispatch: AppDispatch) => {
+  const res: Response = await fetch('/api/auth');
+  const user: User = await res.json();
+  if (!user.errors) {
+    dispatch(setUser(user));
+  }
+  return user;
+};
+
+export const logout = () => async (dispatch: AppDispatch) => {
+  const res: Response = await fetch('/api/auth/logout');
+  const msg: string = await res.json();
+  dispatch(removeUser());
+  return msg;
+};
+
+export const signup = (userData: UserData) => async (dispatch: AppDispatch) => {
+  const res: Response = await fetch('/api/auth/signup', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(userData),
+  });
+  const user: User = await res.json();
+  if (!user.errors) {
+    dispatch(setUser(user));
+  }
+  return user;
+};
+
+const initialState: SessionState = {
+  user: null,
+};
+
+const sessionReducer = (state = initialState, action: SessionAction) => {
+  switch (action.type) {
+    case SET_USER:
+      return { ...state, user: action.payload };
+    case REMOVE_USER:
+      return { ...state, user: null };
+    default:
+      return state;
+  }
+}
+
+export default sessionReducer;

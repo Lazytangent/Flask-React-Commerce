@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+const ADD_TRANSACTION = 'transactions/ADD_TRANSACTION';
+
 export const buyStock = createAsyncThunk(
   'transactions/buyStock',
   async (data, { rejectWithValue }) => {
