@@ -1,4 +1,5 @@
-import { AppDispatch, User, UserData, SessionState, SessionAction } from './';
+import { AnyAction } from 'redux';
+import { AppDispatch, User, UserData, SessionState } from './';
 
 const SET_USER = 'session/SET_USER';
 const REMOVE_USER = 'session/REMOVE_USER';
@@ -58,7 +59,7 @@ const initialState: SessionState = {
   user: null,
 };
 
-const sessionReducer = (state = initialState, action: SessionAction) => {
+const sessionReducer = (state = initialState, action: AnyAction) => {
   switch (action.type) {
     case SET_USER:
       return { ...state, user: action.payload };

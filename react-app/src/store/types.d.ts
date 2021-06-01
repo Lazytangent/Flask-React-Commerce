@@ -21,11 +21,6 @@ export interface SessionState {
   user: User | null;
 }
 
-export interface SessionAction {
-  type: string;
-  payload: User | undefined;
-}
-
 /** Transaction Types */
 export interface TransactionData {
   symbol: string;
