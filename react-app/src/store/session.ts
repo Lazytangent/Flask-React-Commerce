@@ -1,5 +1,5 @@
 import { AnyAction } from 'redux';
-import { AppDispatch, User, UserData, SessionState } from './';
+import { AppDispatch, User, LoginUserData, SignupUserData, SessionState } from './';
 
 const SET_USER = 'session/SET_USER';
 const REMOVE_USER = 'session/REMOVE_USER';
@@ -13,7 +13,7 @@ const removeUser = () => ({
   type: REMOVE_USER,
 });
 
-export const login = (userData: UserData) => async (dispatch: AppDispatch) => {
+export const login = (userData: LoginUserData) => async (dispatch: AppDispatch) => {
   const res: Response = await fetch('/api/auth/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -42,7 +42,7 @@ export const logout = () => async (dispatch: AppDispatch) => {
   return msg;
 };
 
-export const signup = (userData: UserData) => async (dispatch: AppDispatch) => {
+export const signup = (userData: SignupUserData) => async (dispatch: AppDispatch) => {
   const res: Response = await fetch('/api/auth/signup', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

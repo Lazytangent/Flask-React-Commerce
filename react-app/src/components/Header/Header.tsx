@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-import { RootState } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../store";
 
 import { logout } from "../../store/session";
 import Signup from "../Signup";
@@ -10,8 +9,8 @@ import Login from "../Login";
 import Notifications from '../Notifications';
 
 const Header = () => {
-  const dispatch = useDispatch();
-  const sessionUser = useSelector((state: RootState) => state.session.user);
+  const dispatch = useAppDispatch();
+  const sessionUser = useAppSelector((state) => state.session.user);
 
   const [showNavbar, setShowNavbar] = useState(false);
 

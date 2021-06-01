@@ -11,7 +11,12 @@ export interface User {
   errors?: string[];
 }
 
-export interface UserData {
+export interface LoginUserData {
+  credential: string;
+  password: string;
+}
+
+export interface SignupUserData {
   username: string;
   email: string;
   password: string;
