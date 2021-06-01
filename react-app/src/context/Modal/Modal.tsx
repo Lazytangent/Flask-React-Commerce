@@ -1,10 +1,10 @@
 import { createContext, useContext, useState, useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
-import { ContextProps, ProviderProps, ModalProps } from './types.d';
+import { ProviderProps, ModalProps } from './types.d';
 import './Modal.css';
 
-const ModalContext = createContext<Partial<ContextProps>>(null);
+const ModalContext = createContext<Element | null>(null);
 
 export const ModalProvider = ({ children }: ProviderProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
