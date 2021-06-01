@@ -8,7 +8,7 @@ from .utils.helpers import validation_errors_to_error_messages
 auth_routes = Blueprint('auth', __name__)
 
 
-@auth_routes.route('/')
+@auth_routes.route('')
 def authenticate():
     """
     Authenticates a user.
