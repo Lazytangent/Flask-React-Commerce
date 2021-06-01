@@ -82,28 +82,6 @@ def buy():
     return {'errors': validation_errors_to_error_messages(form.errors)}
 
 
-@stock_routes.route('/history')
-@login_required
-def history():
-    """
-    Show history of transactions
-    """
-    hist = Transaction.query.filter(Transaction.user_id ==
-                                    current_user.id).all()
-    stocks = [d.stock for d in hist]
-    names = {}
-    hist = [t.to_dict() for t in hist]
-
-    for stock in stocks:
-        quote = lookup_symbol(stock)
-        names[stock] = quote['name']
-
-    return {
-        'history': hist,
-        'names': names,
-    }
-
-
 @stock_routes.route('/quote')
 @login_required
 def quote():

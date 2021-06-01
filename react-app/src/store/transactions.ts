@@ -1,34 +1,9 @@
-import { AppDispatch } from './';
+import { AnyAction } from 'redux';
+import { AppDispatch, TransactionData, Transaction, Quote } from './';
 
 const ADD_TRANSACTION = 'transactions/ADD_TRANSACTION';
 const ADD_TRANSACTIONS = 'transactions/ADD_TRANSACTIONS';
-const ADD_HISTORY = 'transactions/ADD_HISTORY';
 const ADD_QUOTE = 'transactions/ADD_QUOTE';
-
-interface TransactionData {
-  symbol: string;
-  shares: number;
-}
-
-interface Transaction {
-  id: number;
-  timestamp: string;
-  user_id: number;
-  stock: string;
-  price: number;
-  bought: number;
-  sold: number;
-  total: string;
-  holdings: number;
-  errors?: string[];
-}
-
-interface Quote {
-  errors?: string[];
-  name: string;
-  price: number;
-  symbol: string;
-}
 
 const addTransaction = (transaction: Transaction) => ({
   type: ADD_TRANSACTION,
@@ -37,11 +12,6 @@ const addTransaction = (transaction: Transaction) => ({
 
 const addTransactions = (transactions: Transaction[]) => ({
   type: ADD_TRANSACTIONS,
-  payload: transactions,
-});
-
-const addHistory = (transactions: Transaction[]) => ({
-  type: ADD_HISTORY,
   payload: transactions,
 });
 
@@ -70,13 +40,6 @@ export const getPortfolio = () => async (dispatch: AppDispatch) => {
   return portfolio;
 };
 
-export const getHistory = () => async (dispatch: AppDispatch) => {
-  const res: Response = await fetch('/api/stocks/history');
-  const history: Transaction[] = await res.json();
-  dispatch(addHistory(history));
-  return history;
-};
-
 export const getQuote = (symbol: string) => async (dispatch: AppDispatch) => {
   const res: Response = await fetch(`/api/stocks/quote?stock=${symbol}`);
   const quote: Quote = await res.json();
@@ -101,33 +64,26 @@ export const sellStock = (data: TransactionData) => async (dispatch: AppDispatch
 
 const initialState = { errors: [], quote: null, history: null };
 
-const transactionsSlice = createSlice({
-  name: 'transactions',
-  initialState,
-  reducers: {},
-  extraReducers: {
-    [buyStock.fulfilled]: (state, action) => {
-      state[action.id] = action.payload;
-    },
-    [buyStock.rejected]: (state, action) => {
-      state.errors = action.payload;
-    },
-    [getHistory.fulfilled]: (state, action) => {
-      state.history = action.payload;
-    },
-    [getQuote.fulfilled]: (state, action) => {
-      state.quote = action.payload;
-    },
-    [getQuote.rejected]: (state, action) => {
-      state.errors = action.payload;
-    },
-    [sellStock.fulfilled]: (state, action) => {
-      action[action.id] = action.payload;
-    },
-    [sellStock.rejected]: (state, action) => {
-      state.errors = action.payload;
-    },
-  },
-});
+const transactionsReducer = (state = initialState, action: AnyAction) => {
+  switch (action.type) {
+    case ADD_TRANSACTION:
+      return {
+        ...state,
+        [action.payload?.id]: action.payload,
+      };
+    case ADD_TRANSACTIONS:
+      return {
+        ...state,
+        ...Object.fromEntries(action.payload?.map!((transaction: Transaction) => [transaction.id, transaction]))
+      };
+    case ADD_QUOTE:
+      return {
+        ...state,
+        quote: action.payload,
+      };
+    default:
+      return state;
+  }
+};
 
-export default transactionsSlice.reducer;
+export default transactionsReducer;

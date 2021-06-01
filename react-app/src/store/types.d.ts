@@ -4,25 +4,50 @@ export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
 /** Session Types */
-interface User {
+export interface User {
   id: number;
   username: string;
   email: string;
   errors?: string[];
 }
 
-interface UserData {
+export interface UserData {
   username: string;
   email: string;
   password: string;
 }
 
-interface SessionState {
+export interface SessionState {
   user: User | null;
 }
 
-interface SessionAction {
+export interface SessionAction {
   type: string;
   payload: User | undefined;
 }
 
+/** Transaction Types */
+export interface TransactionData {
+  symbol: string;
+  shares: number;
+}
+
+export interface Transaction {
+  id: number;
+  timestamp: string;
+  user_id: number;
+  stock: string;
+  price: number;
+  bought: number;
+  sold: number;
+  total: string;
+  holdings: number;
+  errors?: string[];
+}
+
+export interface Quote {
+  errors?: string[];
+  name: string;
+  price: number;
+  symbol: string;
+}
