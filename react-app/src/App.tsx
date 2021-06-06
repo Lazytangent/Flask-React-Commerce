@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 
+import { useAppDispatch } from './store';
 import { authenticate } from './store/session';
 import Home from './components/Home';
 import Header from './components/Header';
@@ -12,7 +12,7 @@ import Sell from './components/Sell';
 import History from './components/History';
 
 const App = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(authenticate());

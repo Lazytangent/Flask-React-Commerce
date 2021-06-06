@@ -1,0 +1,49 @@
+.form {
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  border-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.heading {
+  font-size: 2rem;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+.input {
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  border-style: none;
+  margin: 0.15rem;
+  font-size: 1.35rem;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+::-webkit-input-placeholder {
+  text-align: center;
+}
+
+:-moz-placeholder {
+  text-align: center;
+}
+
+.input:focus {
+  border: solid blue 0.1rem;
+  box-sizing: border-box;
+}
+
+.button {
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border-style: none;
+  font-size: 1.35rem;
+  margin: 0.15rem;
+}
+
+.button:hover {
+  background-color: lightgreen;
+}

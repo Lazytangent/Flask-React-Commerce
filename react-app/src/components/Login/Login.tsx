@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
+import styles from './Login.module.css';
 import { useAppDispatch } from '../../store';
 import { login } from '../../store/session';
 
@@ -16,20 +17,23 @@ const Login = () => {
 
   return (
     <>
-      <form onSubmit={submitHandler}>
+      <form onSubmit={submitHandler} className={styles.form}>
+        <h3 className={styles.heading}>Login</h3>
         <input
+          className={styles.input}
           type="text"
           value={credential}
-          placeholder="Enter your username or email..."
+          placeholder="Username or Email"
           onChange={(e) => setCredential(e.target.value)}
         />
         <input
+          className={styles.input}
           type="password"
           value={password}
-          placeholder="Enter your password..."
+          placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Login</button>
+        <button type="submit" className={styles.button}>Login</button>
       </form>
     </>
   );
