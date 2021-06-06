@@ -22,7 +22,7 @@ const App = () => {
     <>
       <Header />
       <Switch>
-        <Route path="/">
+        <Route exact path="/">
           <Home />
         </Route>
         <Route path="/quote">
