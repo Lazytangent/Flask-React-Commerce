@@ -1,5 +1,6 @@
 from flask import Blueprint, request
 from flask_login import current_user, login_user, logout_user, login_required
+from sqlalchemy import or_
 
 from app.forms import LoginForm, SignUpForm, ResetPwdForm
 from app.models import db, User
@@ -26,7 +27,8 @@ def login():
     form = LoginForm()
     form['csrf_token'].data = request.cookies['csrf_token']
     if form.validate_on_submit():
-        user = User.query.filter(User.username == form.data['username']).first()
+        user = User.query.filter(or_(User.username == form.data['credential'],
+        User.email == form.data['credential'])).first()
         login_user(user)
         return user.to_dict()
     return {'errors': validation_errors_to_error_messages(form.errors)}, 401
