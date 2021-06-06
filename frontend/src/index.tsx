@@ -1,12 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+
+import { store } from './store';
+import NotificationProvider from './context/Notification';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+const Root = () => (
+  <Provider store={store}>
+    <BrowserRouter>
+      <NotificationProvider>
+        <App />
+      </NotificationProvider>
+    </BrowserRouter>
+  </Provider>
+);
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Root />
   </React.StrictMode>,
   document.getElementById('root')
 );
