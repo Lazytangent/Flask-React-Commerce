@@ -62,7 +62,7 @@ export const sellStock = (data: TransactionData) => async (dispatch: AppDispatch
   return transaction;
 };
 
-const initialState = { errors: [], quote: null, history: null };
+const initialState = { errors: [], quote: null, history: new Array() };
 
 const transactionsReducer = (state = initialState, action: AnyAction) => {
   switch (action.type) {
@@ -70,6 +70,7 @@ const transactionsReducer = (state = initialState, action: AnyAction) => {
       return {
         ...state,
         [action.payload?.id]: action.payload,
+        history: (new Set(...state.history)).add(action.payload?.id),
       };
     case ADD_TRANSACTIONS:
       return {
