@@ -62,7 +62,15 @@ export const sellStock = (data: TransactionData) => async (dispatch: AppDispatch
   return transaction;
 };
 
-const initialState = { errors: [], quote: null, history: new Array() };
+const createList = (state: number[], newlist: Transaction[]) => {
+  const set = new Set(state);
+  for (const transaction of newlist) {
+    set.add(transaction.id);
+  }
+  return Array.from(set);
+};
+
+const initialState = { list: [], errors: [], quote: null, history: new Array() };
 
 const transactionsReducer = (state = initialState, action: AnyAction) => {
   switch (action.type) {
@@ -75,7 +83,8 @@ const transactionsReducer = (state = initialState, action: AnyAction) => {
     case ADD_TRANSACTIONS:
       return {
         ...state,
-        ...Object.fromEntries(action.payload?.map!((transaction: Transaction) => [transaction.id, transaction]))
+        ...Object.fromEntries(action.payload?.map!((transaction: Transaction) => [transaction.id, transaction])),
+        list: createList(state.list, action.payload),
       };
     case ADD_QUOTE:
       return {
