@@ -72,7 +72,7 @@ const createList = (state: number[], newlist: Transaction[]) => {
   return Array.from(set);
 };
 
-const initialState = { list: [], errors: [], quote: null, history: new Array() };
+const initialState = { list: [], errors: [], quote: null, history: [] };
 
 const transactionsReducer = (state = initialState, action: AnyAction) => {
   switch (action.type) {

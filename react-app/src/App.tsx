@@ -9,7 +9,6 @@ import Footer from './components/Footer';
 import Quote from './components/Quote';
 import Buy from './components/Buy';
 import Sell from './components/Sell';
-import History from './components/History';
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -35,7 +34,7 @@ const App = () => {
           <Sell />
         </Route>
         <Route path="/history">
-          <History />
+          <Home />
         </Route>
       </Switch>
       <Footer />
