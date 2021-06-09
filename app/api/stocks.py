@@ -14,6 +14,8 @@ def index():
     """
     Show portfolio of stocks
     """
+    if not current_user:
+        return {'errors': ['Not logged in']}, 400
     hist = Transaction.query.filter(Transaction.user_id ==
                                     current_user.id).all()
     stock = Transaction.query.filter(Transaction.user_id ==

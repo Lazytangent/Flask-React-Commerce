@@ -7,10 +7,11 @@ import { getPortfolio } from '../../store/transactions';
 const Home = () => {
   const dispatch = useAppDispatch();
   const transactions = useAppSelector((state) => state.transactions.list.map((id: number) => state.transactions[id]));
+  const sessionUser = useAppSelector((state) => state.session.user);
 
   useEffect(() => {
     dispatch(getPortfolio());
-  }, [dispatch]);
+  }, [dispatch, sessionUser]);
 
   return (
     <>

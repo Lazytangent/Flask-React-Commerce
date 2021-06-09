@@ -36,7 +36,9 @@ export const buyStock = (data: TransactionData) => async (dispatch: AppDispatch)
 export const getPortfolio = () => async (dispatch: AppDispatch) => {
   const res: Response = await fetch('/api/stocks');
   const portfolio: Transaction[] = await res.json();
-  dispatch(addTransactions(portfolio));
+  if (res.ok) {
+    dispatch(addTransactions(portfolio));
+  }
   return portfolio;
 };
 
@@ -83,8 +85,8 @@ const transactionsReducer = (state = initialState, action: AnyAction) => {
     case ADD_TRANSACTIONS:
       return {
         ...state,
-        ...Object.fromEntries(action.payload?.map!((transaction: Transaction) => [transaction.id, transaction])),
-        list: createList(state.list, action.payload),
+        ...Object.fromEntries(action.payload?.hist?.map!((transaction: Transaction) => [transaction.id, transaction])),
+        list: createList(state.list, action.payload.hist),
       };
     case ADD_QUOTE:
       return {
