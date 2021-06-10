@@ -24,6 +24,12 @@ export interface SignupUserData {
 
 export interface SessionState {
   user: User | null;
+  message: string | null;
+}
+
+export interface PasswordData {
+  oldpwd: string;
+  newpwd: string;
 }
 
 /** Transaction Types */
